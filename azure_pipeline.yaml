@@ -43,7 +43,7 @@ parameters:
     - deployment: 'mailrelay'
       environment: 'dev'
       component: 'mailrelay'
-      service_connection: 'dts-sharedservice-dev'
+      service_connection: 'DTS-SHAREDSERVICES-DEV'
       dependsOn: 'Precheck'
 
 stages:
@@ -58,7 +58,7 @@ stages:
             parameters:
               keyvaultName: 'infra-vault-nonprod'
               keyvaultSecret: 'azure-devops-token'
-              serviceConnection: 'azurerm-sandbox'
+              serviceConnection: 'DCD-CFT-Sandbox'
 
 
   - ${{ each deployment in parameters.environment_components }}:

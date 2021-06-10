@@ -1,4 +1,4 @@
-variable "environment" {}
+variable "env" {}
 
 variable "product" {
   default = "mailrelay"
@@ -8,4 +8,4 @@ variable "location" {
   default = "uksouth"
 }
 
-variable "activity_name" {}
+variable "builtFrom" {}
