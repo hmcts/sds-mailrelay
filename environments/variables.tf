@@ -7,3 +7,5 @@ variable "product" {
 variable "location" {
   default = "uksouth"
 }
+
+variable "builtFrom" {}

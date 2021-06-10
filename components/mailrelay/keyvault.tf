@@ -1,7 +1,14 @@
+module "ctags" {
+  source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  environment = var.environment
+  product     = var.product
+  builtFrom   = var.builtFrom
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "sds-${var.product}-${var.environment}-rg"
   location = var.location
-  tags     = local.common_tags
+  tags     = module.ctags.common_tags
 }
 
 module "azurekeyvault" {
@@ -11,7 +18,7 @@ module "azurekeyvault" {
   env                     = var.environment
   resource_group_name     = azurerm_resource_group.rg.name
   product_group_name      = "DTS Platform Operations"
-  common_tags             = local.common_tags
+  common_tags             = module.ctags.common_tags
   create_managed_identity = true
   object_id               = data.azurerm_client_config.current.object_id
 }
