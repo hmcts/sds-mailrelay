@@ -24,7 +24,6 @@ locals {
   common_tags = {
     "managedBy"          = "SS DevOps"
     "solutionOwner"      = "Shared Services"
-    "activityName"       = var.activity_name
     "dataClassification" = "Internal"
     "automation"         = "SS AKS Build Infrastructure"
     "costCentre"         = "ss-aks" // until we get a better one, this is the generic cft contingency one
