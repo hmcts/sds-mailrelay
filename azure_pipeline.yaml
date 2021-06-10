@@ -43,7 +43,7 @@ parameters:
     - deployment: 'mailrelay'
       environment: 'dev'
       component: 'mailrelay'
-      service_connection: 'DTS-SHAREDSERVICE-DEV'
+      service_connection: 'DTS-SHAREDSERVICES-DEV'
       dependsOn: 'Precheck'
 
 stages:
