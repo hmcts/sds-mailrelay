@@ -58,7 +58,7 @@ stages:
             parameters:
               keyvaultName: 'infra-vault-nonprod'
               keyvaultSecret: 'azure-devops-token'
-              serviceConnection: 'azurerm-sandbox'
+              serviceConnection: 'DCD-CFT-Sandbox'
 
 
   - ${{ each deployment in parameters.environment_components }}:
