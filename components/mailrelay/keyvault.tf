@@ -17,7 +17,7 @@ module "azurekeyvault" {
   product                 = var.product
   env                     = var.env
   resource_group_name     = azurerm_resource_group.rg.name
-  product_group_name      = "DTS Platform Operations"
+  product_group_object_id = var.product_group_object_id
   common_tags             = module.ctags.common_tags
   create_managed_identity = true
   object_id               = data.azurerm_client_config.current.object_id

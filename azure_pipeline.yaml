@@ -40,10 +40,15 @@ parameters:
   - name: environment_components
     type: object
     default:
-    - deployment: 'mailrelay'
+    - deployment: 'MailrelayDev'
       environment: 'dev'
       component: 'mailrelay'
       service_connection: 'DTS-SHAREDSERVICES-DEV'
+      dependsOn: 'Precheck'
+    - deployment: 'MailrelayProd'
+      environment: 'prod'
+      component: 'mailrelay'
+      service_connection: 'DTS-SHAREDSERVICES-PROD'
       dependsOn: 'Precheck'
 
 stages:
