@@ -45,6 +45,11 @@ parameters:
       component: 'mailrelay'
       service_connection: 'DTS-SHAREDSERVICES-DEV'
       dependsOn: 'Precheck'
+    - deployment: 'mailrelay'
+      environment: 'prod'
+      component: 'mailrelay'
+      service_connection: 'DTS-SHAREDSERVICES-PROD'
+      dependsOn: 'Precheck'
 
 stages:
   - stage: Precheck
