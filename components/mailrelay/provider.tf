@@ -1,7 +1,6 @@
 terraform {
   required_version = "~> 1.0.0"
   backend "azurerm" {
-    features {}
     subscription_id = "04d27a32-7a07-48b3-95b8-3c8691e1a263"
   }
   required_providers {
@@ -13,8 +12,11 @@ terraform {
 }
 
 provider "azurerm" {
-  alias = "acme"
   features {}
-  skip_provider_registration = "true"
-  subscription_id            = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
+}
+
+provider "azurerm" {
+  features {}
+  alias           = "acme"
+  subscription_id = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
 }
