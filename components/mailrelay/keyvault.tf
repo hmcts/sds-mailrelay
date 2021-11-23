@@ -22,3 +22,9 @@ module "azurekeyvault" {
   create_managed_identity = true
   object_id               = data.azurerm_client_config.current.object_id
 }
+
+resource "azurerm_role_assignment" "acme" {
+  scope                = data.azurerm_key_vault.acme.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = data.azurerm_user_assigned_identity.mailrelay_mi.principal_id
+}
