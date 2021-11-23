@@ -5,6 +5,7 @@ data "azurerm_client_config" "current" {
 }
 
 data "azurerm_key_vault" "acme" {
+  provider            = azurerm.acme
   name                = "acmedtssdsprod"
   resource_group_name = "sds-platform-prod-rg"
 }
