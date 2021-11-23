@@ -12,5 +12,5 @@ data "azurerm_key_vault" "acme" {
 
 data "azurerm_user_assigned_identity" "mailrelay_mi" {
   name                = "mailrelay-${var.env}-mi"
-  resource_group_name = "managed-identities-dev-rg"
+  resource_group_name = "managed-identities-${var.env}-rg"
 }
