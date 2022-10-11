@@ -5,9 +5,9 @@ data "azurerm_client_config" "current" {
 }
 
 data "azurerm_key_vault" "acme" {
-  provider            = azurerm.acme
+  provider            = azurerm.control
   name                = "acmedtssdsprod"
-  resource_group_name = "sds-platform-prod-rg"
+  resource_group_name = "enterprise-prod-rg"
 }
 
 data "azurerm_user_assigned_identity" "mailrelay_mi" {
