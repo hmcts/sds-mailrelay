@@ -19,7 +19,7 @@ variables:
   - name: timeoutInMinutes
     value: 60
   - name: agentPool
-    value: ubuntu-18.04
+    value: ubuntu-20.04
   - name: build
     value: $(Build.BuildNumber)
   - name: product
