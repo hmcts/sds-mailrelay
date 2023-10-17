@@ -32,9 +32,19 @@ resource "azurerm_role_assignment" "acme" {
 locals {
   # Needed for role assignment only
   wi_environment = var.env == "dev" ? "stg" : var.env
+
+  managed_identity_subscription_id = {
+    stg = {
+      subscription = "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
+    }
+    prod = {
+      subscription = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
+    }
+  }
 }
+
 provider "azurerm" {
-  subscription_id            = "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
+  subscription_id            = local.managed_identity_subscription_id["${var.env}"].subscription
   skip_provider_registration = "true"
   features {}
   alias = "managed_identity_infra_sub"
