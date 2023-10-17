@@ -29,6 +29,10 @@ resource "azurerm_role_assignment" "acme" {
   principal_id         = data.azurerm_user_assigned_identity.mailrelay_mi.principal_id
 }
 
+locals {
+  # Needed for role assignment only
+  wi_environment = var.env == "dev" ? "stg" : var.env
+}
 provider "azurerm" {
   subscription_id            = "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
   skip_provider_registration = "true"
@@ -38,8 +42,8 @@ provider "azurerm" {
 
 resource "azurerm_user_assigned_identity" "managed_identity" {
   provider            = azurerm.managed_identity_infra_sub
-  name                = "${var.product}-stg-mi"
-  resource_group_name = "managed-identities-stg-rg"
+  name                = "${var.product}-${local.wi_environment}-mi"
+  resource_group_name = "managed-identities-${local.wi_environment}-rg"
   location            = var.location
   tags                = module.ctags.common_tags
 }
