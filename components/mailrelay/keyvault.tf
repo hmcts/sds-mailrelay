@@ -44,7 +44,7 @@ locals {
 }
 
 provider "azurerm" {
-  subscription_id            = local.managed_identity_subscription_id["${var.wi_environment}"].subscription
+  subscription_id            = local.managed_identity_subscription_id["${local.wi_environment}"].subscription
   skip_provider_registration = "true"
   features {}
   alias = "managed_identity_infra_sub"
