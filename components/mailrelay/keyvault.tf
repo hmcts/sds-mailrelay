@@ -3,7 +3,6 @@ module "ctags" {
   environment = var.env
   product     = var.product
   builtFrom   = var.builtFrom
-  newTag      = "tag"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -68,6 +67,6 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
 
   secret_permissions = [
     "Get",
-    "List",
+    "List"
   ]
 }
