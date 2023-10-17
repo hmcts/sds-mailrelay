@@ -1,6 +1,4 @@
-variable "env" {
-    default = "dev"
-}
+variable "env" {}
 
 variable "product" {
   default = "mailrelay"
