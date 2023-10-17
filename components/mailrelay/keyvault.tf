@@ -20,7 +20,7 @@ module "azurekeyvault" {
   product_group_object_id = var.product_group_object_id
   common_tags             = module.ctags.common_tags
   # create_managed_identity = true
-  object_id               = data.azurerm_client_config.current.object_id
+  object_id = data.azurerm_client_config.current.object_id
 }
 
 resource "azurerm_role_assignment" "acme" {
