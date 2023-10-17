@@ -42,7 +42,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_user_assigned_identity" "managed_identity" {
-  count                = var.env == "stg" ? 1 : 0
+  count               = var.env == "stg" ? 1 : 0
   provider            = azurerm.managed_identity_infra_sub
   name                = "${var.product}-${local.wi_environment}-mi"
   resource_group_name = "managed-identities-${local.wi_environment}-rg"
@@ -51,7 +51,7 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
 }
 
 resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
-  count                = var.env == "stg" ? 1 : 0
+  count        = var.env == "stg" ? 1 : 0
   key_vault_id = module.azurekeyvault.key_vault_id
 
   object_id = azurerm_user_assigned_identity.managed_identity.principal_id
