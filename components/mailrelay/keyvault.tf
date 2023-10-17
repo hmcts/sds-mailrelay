@@ -50,25 +50,25 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
   tags                = module.ctags.common_tags
 }
 
-resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
-  count        = var.env == "dev" ? 1 : 0
-  key_vault_id = module.azurekeyvault.key_vault_id
+# resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
+#   count        = var.env == "dev" ? 1 : 0
+#   key_vault_id = module.azurekeyvault.key_vault_id
 
-  object_id = azurerm_user_assigned_identity.managed_identity[count.index].principal_id
-  tenant_id = data.azurerm_client_config.current.tenant_id
+#   object_id = azurerm_user_assigned_identity.managed_identity[count.index].principal_id
+#   tenant_id = data.azurerm_client_config.current.tenant_id
 
-  key_permissions = [
-    "Get",
-    "List",
-  ]
+#   key_permissions = [
+#     "Get",
+#     "List",
+#   ]
 
-  certificate_permissions = [
-    "Get",
-    "List",
-  ]
+#   certificate_permissions = [
+#     "Get",
+#     "List",
+#   ]
 
-  secret_permissions = [
-    "Get",
-    "List",
-  ]
-}
+#   secret_permissions = [
+#     "Get",
+#     "List",
+#   ]
+# }
