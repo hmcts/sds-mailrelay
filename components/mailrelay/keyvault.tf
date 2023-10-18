@@ -72,3 +72,10 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
     "List"
   ]
 }
+
+resource "azurerm_role_assignment" "acme_kv" {
+  count                = var.env == "dev" ? 1 : 0
+  scope                = data.azurerm_key_vault.acme.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.managed_identity[count.index].principal_id
+}
