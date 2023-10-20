@@ -16,10 +16,10 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "azurekeyvault" {
-  for_each                = local.product_list
+  # for_each                = local.product_list
   source                  = "git::https://github.com/hmcts/cnp-module-key-vault?ref=master"
   name                    = "sds-${var.product}-${var.env}"
-  product                 = each.value
+  product                 = var.product
   env                     = var.env
   resource_group_name     = azurerm_resource_group.rg.name
   product_group_object_id = var.product_group_object_id
