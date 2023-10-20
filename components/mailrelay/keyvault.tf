@@ -115,7 +115,7 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy_2" {
 }
 
 resource "azurerm_key_vault_access_policy" "prod_managed_identity_access_policy_2" {
-  count               = var.env == "prod" ? 1 : 0
+  count        = var.env == "prod" ? 1 : 0
   key_vault_id = module.azurekeyvault.key_vault_id
 
   object_id = azurerm_user_assigned_identity.prod_managed_identity_2[count.index].principal_id
@@ -152,7 +152,7 @@ resource "azurerm_role_assignment" "acme_kv_2" {
 }
 
 resource "azurerm_role_assignment" "prod_acme_kv_2" {
-  count               = var.env == "prod" ? 1 : 0
+  count                = var.env == "prod" ? 1 : 0
   scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.prod_managed_identity_2[count.index].principal_id
