@@ -1,7 +1,6 @@
 variable "env" {}
 
 variable "product" {
-  type    = string
   default = "mailrelay"
 }
 
