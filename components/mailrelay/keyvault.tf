@@ -116,7 +116,7 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy_2" {
 resource "azurerm_key_vault_access_policy" "prod_managed_identity_access_policy_2" {
   key_vault_id = module.azurekeyvault.key_vault_id
 
-  object_id = azurerm_user_assigned_identity.prod_managed_identity_2[count.index].principal_id
+  object_id = azurerm_user_assigned_identity.prod_managed_identity_2.principal_id
   tenant_id = data.azurerm_client_config.current.tenant_id
 
   key_permissions = [
