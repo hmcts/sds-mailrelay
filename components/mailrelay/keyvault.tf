@@ -1,8 +1,12 @@
 module "ctags" {
   source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
   environment = var.env
-  product     = var.product
+  product     = "mailrelay"
   builtFrom   = var.builtFrom
+}
+
+locals {
+  product_list = toset(compact(concat(var.product)))
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -12,9 +16,10 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "azurekeyvault" {
+  for_each                = local.product_list
   source                  = "git::https://github.com/hmcts/cnp-module-key-vault?ref=master"
-  name                    = "sds-${var.product}-${var.env}"
-  product                 = var.product
+  name                    = "sds-${each.value}-${var.env}"
+  product                 = each.value
   env                     = var.env
   resource_group_name     = azurerm_resource_group.rg.name
   product_group_object_id = var.product_group_object_id
@@ -26,7 +31,7 @@ module "azurekeyvault" {
 resource "azurerm_role_assignment" "acme" {
   scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = data.azurerm_user_assigned_identity.mailrelay_mi.principal_id
+  principal_id         = data.azurerm_user_assigned_identity.mailrelay_mi[each.value].principal_id
 }
 
 locals {
@@ -44,7 +49,16 @@ provider "azurerm" {
 resource "azurerm_user_assigned_identity" "managed_identity" {
   count               = var.env == "dev" ? 1 : 0
   provider            = azurerm.managed_identity_infra_sub
-  name                = "${var.product}-${local.wi_environment}-mi"
+  name                = "mailrelay-${local.wi_environment}-mi"
+  resource_group_name = "managed-identities-${local.wi_environment}-rg"
+  location            = var.location
+  tags                = module.ctags.common_tags
+}
+
+resource "azurerm_user_assigned_identity" "managed_identity_2" {
+  count               = var.env == "dev" ? 1 : 0
+  provider            = azurerm.managed_identity_infra_sub
+  name                = "mailrelay2-${local.wi_environment}-mi"
   resource_group_name = "managed-identities-${local.wi_environment}-rg"
   location            = var.location
   tags                = module.ctags.common_tags
@@ -73,9 +87,39 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
   ]
 }
 
+resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
+  count        = var.env == "dev" ? 1 : 0
+  key_vault_id = module.azurekeyvault.key_vault_id
+
+  object_id = azurerm_user_assigned_identity.managed_identity_2[count.index].principal_id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+
+  key_permissions = [
+    "Get",
+    "List",
+  ]
+
+  certificate_permissions = [
+    "Get",
+    "List",
+  ]
+
+  secret_permissions = [
+    "Get",
+    "List"
+  ]
+}
+
 resource "azurerm_role_assignment" "acme_kv" {
   count                = var.env == "dev" ? 1 : 0
   scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.managed_identity[count.index].principal_id
+}
+
+resource "azurerm_role_assignment" "acme_kv" {
+  count                = var.env == "dev" ? 1 : 0
+  scope                = data.azurerm_key_vault.acme.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.managed_identity_2[count.index].principal_id
 }
