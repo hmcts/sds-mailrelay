@@ -5,10 +5,6 @@ module "ctags" {
   builtFrom   = var.builtFrom
 }
 
-locals {
-  product_list = toset(compact(concat(var.product)))
-}
-
 resource "azurerm_resource_group" "rg" {
   name     = "sds-${var.product}-${var.env}-rg"
   location = var.location
