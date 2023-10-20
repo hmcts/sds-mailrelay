@@ -87,7 +87,7 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
   ]
 }
 
-resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
+resource "azurerm_key_vault_access_policy" "managed_identity_access_policy_2" {
   count        = var.env == "dev" ? 1 : 0
   key_vault_id = module.azurekeyvault.key_vault_id
 
