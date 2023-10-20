@@ -117,7 +117,7 @@ resource "azurerm_role_assignment" "acme_kv" {
   principal_id         = azurerm_user_assigned_identity.managed_identity[count.index].principal_id
 }
 
-resource "azurerm_role_assignment" "acme_kv" {
+resource "azurerm_role_assignment" "acme_kv_2" {
   count                = var.env == "dev" ? 1 : 0
   scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
