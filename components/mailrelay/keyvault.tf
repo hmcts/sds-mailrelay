@@ -31,7 +31,7 @@ module "azurekeyvault" {
 resource "azurerm_role_assignment" "acme" {
   scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = data.azurerm_user_assigned_identity.mailrelay_mi[each.value].principal_id
+  principal_id         = data.azurerm_user_assigned_identity.mailrelay_mi.principal_id
 }
 
 locals {
