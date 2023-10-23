@@ -83,7 +83,7 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
 
   lifecycle {
     prevent_destroy = true
-  } 
+  }
 }
 
 # resource "azurerm_key_vault_access_policy" "prod_managed_identity_access_policy_2" {
