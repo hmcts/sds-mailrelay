@@ -41,7 +41,7 @@ provider "azurerm" {
   alias = "managed_identity_infra_sub"
 }
 
-resource "azurerm_user_assigned_identity" "managed_identity" {
+resource "azurerm_user_assigned_identity" "wi_managed_identity" {
   for_each            = local.product_list
   provider            = azurerm.managed_identity_infra_sub
   name                = "${each.value}-${local.wi_environment}-mi"
@@ -50,20 +50,11 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
   tags                = module.ctags.common_tags
 }
 
-# resource "azurerm_user_assigned_identity" "prod_managed_identity_2" {
-#   count               = var.env == "prod" ? 1 : 0
-#   provider            = azurerm.managed_identity_infra_sub
-#   name                = "mailrelay2-${local.wi_environment}-mi"
-#   resource_group_name = "managed-identities-${local.wi_environment}-rg"
-#   location            = var.location
-#   tags                = module.ctags.common_tags
-# }
-
-resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
+resource "azurerm_key_vault_access_policy" "wi_managed_identity_access_policy" {
   for_each     = local.product_list
   key_vault_id = module.azurekeyvault.key_vault_id
 
-  object_id = azurerm_user_assigned_identity.managed_identity[each.value].principal_id
+  object_id = azurerm_user_assigned_identity.wi_managed_identity[each.value].principal_id
   tenant_id = data.azurerm_client_config.current.tenant_id
 
   key_permissions = [
@@ -81,44 +72,11 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
     "List"
   ]
 
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
-# resource "azurerm_key_vault_access_policy" "prod_managed_identity_access_policy_2" {
-#   count        = var.env == "prod" ? 1 : 0
-#   key_vault_id = module.azurekeyvault.key_vault_id
-
-#   object_id = azurerm_user_assigned_identity.prod_managed_identity_2[count.index].principal_id
-#   tenant_id = data.azurerm_client_config.current.tenant_id
-
-#   key_permissions = [
-#     "Get",
-#     "List",
-#   ]
-
-#   certificate_permissions = [
-#     "Get",
-#     "List",
-#   ]
-
-#   secret_permissions = [
-#     "Get",
-#     "List"
-#   ]
-# }
-
-resource "azurerm_role_assignment" "acme_kv" {
+resource "azurerm_role_assignment" "wi_acme_kv" {
   for_each             = local.product_list
   scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_user_assigned_identity.managed_identity[each.value].principal_id
+  principal_id         = azurerm_user_assigned_identity.wi_managed_identity[each.value].principal_id
 }
-
-# resource "azurerm_role_assignment" "prod_acme_kv_2" {
-#   count                = var.env == "prod" ? 1 : 0
-#   scope                = data.azurerm_key_vault.acme.id
-#   role_definition_name = "Key Vault Secrets User"
-#   principal_id         = azurerm_user_assigned_identity.prod_managed_identity_2[count.index].principal_id
-# }
