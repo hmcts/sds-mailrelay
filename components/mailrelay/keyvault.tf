@@ -31,7 +31,7 @@ resource "azurerm_role_assignment" "acme" {
 
 locals {
   wi_environment = var.env == "dev" ? "stg" : var.env
-  product_list   = var.env == prod ? toset(mailrelay2) : toset(mailrelay, mailrelay2)
+  product_list   = var.env == "prod" ? toset(mailrelay2) : toset(mailrelay, mailrelay2)
 }
 
 provider "azurerm" {
