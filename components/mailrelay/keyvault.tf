@@ -34,12 +34,12 @@ locals {
   # Reason for Prod Mailrelay2 creation here is that for each loop couldn't be passed into the key vault module to iterate over a list of product values (mailrelay and mailrelay2); the create_managed_identity flag above currently creates only Prod Mailrelay Managed Identity
   product_list = var.env == "prod" ? toset(["mailrelay2"]) : toset(["mailrelay", "mailrelay2"])
   managed_identity_subscription_id = {
-  dev = {
-    subscription = "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
-  }
-  prod = {
-    subscription = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
-  }
+    dev = {
+      subscription = "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
+    }
+    prod = {
+      subscription = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
+    }
   }
 }
 
