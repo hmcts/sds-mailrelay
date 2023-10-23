@@ -31,6 +31,7 @@ resource "azurerm_role_assignment" "acme" {
 
 locals {
   wi_environment = var.env == "dev" ? "stg" : var.env
+  # Reason for Prod Mailrelay2 creation here is that for each loop couldn't be passed into the key vault module to iterate over a list of product values (mailrelay and mailrelay2); the create_managed_identity flag above currently creates only Prod Mailrelay Managed Identity
   product_list   = var.env == "prod" ? toset(["mailrelay2"]) : toset(["mailrelay", "mailrelay2"])
 }
 
