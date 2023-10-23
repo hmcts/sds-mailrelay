@@ -44,7 +44,7 @@ provider "azurerm" {
 resource "azurerm_user_assigned_identity" "managed_identity" {
   for_each            = local.product_list
   provider            = azurerm.managed_identity_infra_sub
-  name                = "${each.key}-${local.wi_environment}-mi"
+  name                = "${each.value}-${local.wi_environment}-mi"
   resource_group_name = "managed-identities-${local.wi_environment}-rg"
   location            = var.location
   tags                = module.ctags.common_tags
