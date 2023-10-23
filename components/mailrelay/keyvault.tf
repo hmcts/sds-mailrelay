@@ -30,8 +30,9 @@ resource "azurerm_role_assignment" "acme" {
 }
 
 locals {
-  # Needed for role assignment only
   wi_environment = var.env == "dev" ? "stg" : var.env
+  # Reason for Prod Mailrelay2 creation here is that for each loop couldn't be passed into the key vault module to iterate over a list of product values (mailrelay and mailrelay2); the create_managed_identity flag above currently creates only Prod Mailrelay Managed Identity
+  product_list = var.env == "prod" ? toset(["mailrelay2"]) : toset(["mailrelay", "mailrelay2"])
 }
 
 provider "azurerm" {
@@ -42,19 +43,19 @@ provider "azurerm" {
 }
 
 resource "azurerm_user_assigned_identity" "managed_identity" {
-  count               = var.env == "dev" ? 1 : 0
+  for_each            = local.product_list
   provider            = azurerm.managed_identity_infra_sub
-  name                = "${var.product}-${local.wi_environment}-mi"
+  name                = "${each.value}-${local.wi_environment}-mi"
   resource_group_name = "managed-identities-${local.wi_environment}-rg"
   location            = var.location
   tags                = module.ctags.common_tags
 }
 
 resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
-  count        = var.env == "dev" ? 1 : 0
+  for_each     = local.product_list
   key_vault_id = module.azurekeyvault.key_vault_id
 
-  object_id = azurerm_user_assigned_identity.managed_identity[count.index].principal_id
+  object_id = azurerm_user_assigned_identity.managed_identity[each.value].principal_id
   tenant_id = data.azurerm_client_config.current.tenant_id
 
   key_permissions = [
@@ -71,11 +72,12 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
     "Get",
     "List"
   ]
+
 }
 
 resource "azurerm_role_assignment" "acme_kv" {
-  count                = var.env == "dev" ? 1 : 0
+  for_each             = local.product_list
   scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_user_assigned_identity.managed_identity[count.index].principal_id
+  principal_id         = azurerm_user_assigned_identity.managed_identity[each.value].principal_id
 }
