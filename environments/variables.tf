@@ -1,8 +1,7 @@
 variable "env" {}
 
 variable "product" {
-  type    = list(string)
-  default = ["mailrelay", "mailrelay2"]
+  default = "mailrelay"
 }
 
 variable "location" {
