@@ -31,7 +31,7 @@ resource "azurerm_role_assignment" "acme" {
 
 locals {
   wi_environment = var.env == "dev" ? "stg" : var.env
-  product_list  = var.env == prod ? toset(mailrelay2) : toset(mailrelay, mailrelay2)
+  product_list   = var.env == prod ? toset(mailrelay2) : toset(mailrelay, mailrelay2)
 }
 
 provider "azurerm" {
@@ -60,7 +60,7 @@ resource "azurerm_user_assigned_identity" "managed_identity" {
 # }
 
 resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
-  for_each            = local.product_list
+  for_each     = local.product_list
   key_vault_id = module.azurekeyvault.key_vault_id
 
   object_id = azurerm_user_assigned_identity.managed_identity[each.value].principal_id
@@ -106,7 +106,7 @@ resource "azurerm_key_vault_access_policy" "managed_identity_access_policy" {
 # }
 
 resource "azurerm_role_assignment" "acme_kv" {
-  for_each            = local.product_list
+  for_each             = local.product_list
   scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.managed_identity[each.value].principal_id
