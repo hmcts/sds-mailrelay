@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "azurekeyvault" {
-  source                  = "git::https://github.com/hmcts/cnp-module-key-vault?ref=master"
+  source                  = "git::https://github.com/hmcts/cnp-module-key-vault?ref=DTSPO-31965/remove-jenkins-ptl-access"
   name                    = "sds-${var.product}-${var.env}"
   product                 = var.product
   env                     = var.env
