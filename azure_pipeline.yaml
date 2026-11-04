@@ -43,12 +43,12 @@ parameters:
     - deployment: 'MailrelayDev'
       environment: 'dev'
       component: 'mailrelay'
-      service_connection: 'DTS-SHAREDSERVICES-DEV'
+      service_connection: 'DTS-SHAREDSERVICES-DEV-WIF'
       dependsOn: 'Precheck'
     - deployment: 'MailrelayProd'
       environment: 'prod'
       component: 'mailrelay'
-      service_connection: 'DTS-SHAREDSERVICES-PROD'
+      service_connection: 'DTS-SHAREDSERVICES-PROD-WIF'
       dependsOn: 'Precheck'
 
 stages:
@@ -63,7 +63,7 @@ stages:
             parameters:
               keyvaultName: 'infra-vault-nonprod'
               keyvaultSecret: 'azure-devops-sp-token'
-              serviceConnection: 'DCD-CFT-Sandbox'
+              serviceConnection: 'DCD-CFT-Sandbox-WIF'
               overrideAction: ${{ parameters.overrideAction }}
 
 
